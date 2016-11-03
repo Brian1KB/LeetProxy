@@ -15,9 +15,11 @@ namespace LeetProxy.Node
 
 			_server = new MiNetServer
 			{
-				ServerRole = ServerRole.Node,
-				ServerManager = new NodeServerManager()
+				ServerRole = ServerRole.Node
 			};
+
+			_server.ServerManager = new NodeServerManager(_server, 19133);
+			_server.LevelManager = new SpreadLevelManager(10);
 
 			_server.StartServer();
 		}
