@@ -16,7 +16,8 @@ namespace LeetProxy.Server
 			_server = new MiNetServer
 			{
 				ServerRole = ServerRole.Proxy,
-				ServerManager = new ProxyServerManager()
+				ServerManager = new ProxyServerManager(),
+				MotdProvider = new ProxyMotdProvider()
 			};
 
 			_server.StartServer();
