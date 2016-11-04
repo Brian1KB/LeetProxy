@@ -5,7 +5,7 @@ using System.Net.Sockets;
 using System.Threading;
 using log4net;
 using MiNET;
-using MiNET.Net;
+using LeetProxy.Server.Net;
 
 namespace LeetProxy.Node
 {
@@ -42,21 +42,40 @@ namespace LeetProxy.Node
 					var length = reader.ReadInt32();
 					var buffer = reader.ReadBytes(length);
 
-					var ftlCreatePlayer = (FtlCreatePlayer)PackageFactory.CreatePackage(buffer[0], buffer, "ftl");
+					var ftlPackage = ProxyPackageFactory.CreatePackage(buffer[0], buffer);
 
-					var player = _server.PlayerFactory.CreatePlayer(_server, (IPEndPoint) client.Client.RemoteEndPoint);
-					var networkHandler = new NodeNetworkHandler(_server, player, client);
+					if (ftlPackage.GetType() == typeof(FtlCreatePlayer))
+					{
+						var player = _server.PlayerFactory.CreatePlayer(_server, (IPEndPoint)client.Client.RemoteEndPoint);
+						var networkHandler = new NodeNetworkHandler(_server, player, client);
 
-					player.UseCreativeInventory = false;
-					player.NetworkHandler = networkHandler;
-					player.CertificateData = null;
-					player.Username = ftlCreatePlayer.username;
-					player.ClientUuid = ftlCreatePlayer.clientuuid;
-					player.ServerAddress = ftlCreatePlayer.serverAddress;
-					player.ClientId = ftlCreatePlayer.clientId;
-					player.Skin = ftlCreatePlayer.skin;
+						player.UseCreativeInventory = false;
+						player.NetworkHandler = networkHandler;
+						player.CertificateData = null;
+						player.Username = ((FtlCreatePlayer) ftlPackage).username;
+						player.ClientUuid = ((FtlCreatePlayer)ftlPackage).clientuuid;
+						player.ServerAddress = ((FtlCreatePlayer)ftlPackage).serverAddress.Address.ToString();
+						player.ClientId = ((FtlCreatePlayer)ftlPackage).clientId;
+						player.Skin = ((FtlCreatePlayer)ftlPackage).skin;
 
-					ftlCreatePlayer.PutPool();
+						ftlPackage.PutPool();
+					}
+					else if (ftlPackage.GetType() == typeof(FtlTransferPlayer))
+					{
+						var player = _server.PlayerFactory.CreatePlayer(_server, (IPEndPoint)client.Client.RemoteEndPoint);
+						var networkHandler = new NodeNetworkHandler(_server, player, client);
+
+						player.UseCreativeInventory = false;
+						player.NetworkHandler = networkHandler;
+						player.CertificateData = null;
+						player.Username = ((FtlTransferPlayer)ftlPackage).username;
+						player.ClientUuid = ((FtlTransferPlayer)ftlPackage).clientuuid;
+						player.ServerAddress = ((FtlTransferPlayer)ftlPackage).serverAddress.Address.ToString();
+						player.ClientId = ((FtlTransferPlayer)ftlPackage).clientId;
+						player.Skin = ((FtlTransferPlayer)ftlPackage).skin;
+
+						ftlPackage.PutPool();
+					}
 
 					var writer = new BinaryWriter(stream);
 
@@ -65,7 +84,7 @@ namespace LeetProxy.Node
 				}
 				catch (Exception e)
 				{
-					Log.Info("Failed to create player " + e);
+					Log.Error("Failed to create player " + e);
 
 					try
 					{
@@ -73,6 +92,7 @@ namespace LeetProxy.Node
 					}
 					catch (Exception)
 					{
+						Log.Error("Error while closing connection " + e);
 					}
 				}
 			});

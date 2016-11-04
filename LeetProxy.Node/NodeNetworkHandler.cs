@@ -4,6 +4,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Threading;
 using log4net;
+using LeetProxy.Server.Net;
 using MiNET;
 using MiNET.Net;
 
@@ -111,11 +112,14 @@ namespace LeetProxy.Node
 			{
 				if (_writer == null) return;
 
+				var ns = package.GetType() != typeof(FtlRequestPlayerTransfer) ? (byte) 0 : (byte) 1;
+
 				try
 				{
 					var buffer = package.Encode();
 
 					_writer.Write(buffer.Length);
+					_writer.Write(ns);
 					_writer.Write(buffer);
 					_writer.Flush();
 				}
@@ -132,10 +136,12 @@ namespace LeetProxy.Node
 		{
 			var player = _player;
 
+			Console.WriteLine("Receive: " + package.GetType().FullName);
+
 			if (typeof(McpeDisconnect) == package.GetType())
 			{
 				var mcpeDisconnect = (McpeDisconnect)package;
-				Log.Warn("Got disconnect in node: " + mcpeDisconnect.message);
+				Console.WriteLine("Got disconnect in node: " + mcpeDisconnect.message);
 				player.Disconnect(mcpeDisconnect.message, false);
 			}
 
@@ -182,7 +188,13 @@ namespace LeetProxy.Node
 
 			else if (typeof(McpeText) == package.GetType())
 			{
-				player.HandleMcpeText((McpeText)package);
+				//player.HandleMcpeText((McpeText)package);
+				player.SendMessage("Transferring... ");
+
+				SendPackage(new FtlRequestPlayerTransfer
+				{
+					targetEndpoint = new IPEndPoint(IPAddress.Parse("192.168.0.12"), 19134)
+				});
 			}
 
 			else if (typeof(McpeRemoveEntity) == package.GetType())

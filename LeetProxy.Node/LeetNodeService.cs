@@ -18,7 +18,8 @@ namespace LeetProxy.Node
 				ServerRole = ServerRole.Node
 			};
 
-			_server.ServerManager = new NodeServerManager(_server, 19133);
+			_server.ServerManager = new NodeServerManager(_server, 19134);
+			_server.LevelManager = new SpreadLevelManager(10);
 
 			_server.StartServer();
 		}

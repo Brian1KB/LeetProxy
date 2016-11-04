@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.IO;
 using System.Net;
 using System.Net.Sockets;
@@ -31,11 +32,11 @@ namespace LeetProxy.Server
 				var writer = new BinaryWriter(stream);
 				var reader = new BinaryReader(stream);
 
-				var ftlCreatePlayer = new FtlCreatePlayer()
+				var ftlCreatePlayer = new Net.FtlCreatePlayer
 				{
 					username = playerInfo.Username,
 					clientuuid = playerInfo.ClientUuid,
-					serverAddress = playerInfo.ServerAddress,
+					serverAddress = ParseIpEndpoint(playerInfo.ServerAddress),
 					clientId = playerInfo.ClientId,
 					skin = playerInfo.Skin
 				}.Encode();
@@ -46,9 +47,7 @@ namespace LeetProxy.Server
 
 				reader.ReadInt32();
 
-				Log.Info("Successfully initiated connection with " + _ipEndPoint);
-
-				return new ProxyMessageHandler(client, session);
+				return new ProxyMessageHandler(client, session, playerInfo);
 			}
 			catch (Exception e)
 			{
@@ -56,6 +55,13 @@ namespace LeetProxy.Server
 			}
 
 			return null;
+		}
+
+		public static IPEndPoint ParseIpEndpoint(string endPoint)
+		{
+			var split = endPoint.Split(':');
+
+			return new IPEndPoint(IPAddress.Parse(split[0]), int.Parse(split[1]));
 		}
 	}
 }

@@ -57,8 +57,8 @@
       <HintPath>..\packages\Microsoft.IO.RecyclableMemoryStream.1.1.0.0\lib\net45\Microsoft.IO.RecyclableMemoryStream.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="MiNET, Version=1.0.1244.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\MiNET.1.0.1244\lib\net461\MiNET.dll</HintPath>
+    <Reference Include="MiNET, Version=1.0.1249.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MiNET.1.0.1249\lib\net461\MiNET.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
@@ -87,6 +87,12 @@
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\LeetProxy\LeetProxy.Server.csproj">
+      <Project>{29A8C296-1166-411B-AC40-32C53BF5C29A}</Project>
+      <Name>LeetProxy.Server</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

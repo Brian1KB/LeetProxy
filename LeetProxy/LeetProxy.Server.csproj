@@ -57,8 +57,8 @@
       <HintPath>..\packages\Microsoft.IO.RecyclableMemoryStream.1.1.0.0\lib\net45\Microsoft.IO.RecyclableMemoryStream.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="MiNET, Version=1.0.1244.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\MiNET.1.0.1244\lib\net461\MiNET.dll</HintPath>
+    <Reference Include="MiNET, Version=1.0.1249.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MiNET.1.0.1249\lib\net461\MiNET.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
@@ -67,6 +67,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Numerics" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -79,7 +80,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Net\ProxyPackageFactory.cs" />
+    <Compile Include="Net\FtlCreatePlayer.cs" />
     <Compile Include="LeetProxyService.cs" />
+    <Compile Include="Net\FtlRequestPlayerTransfer.cs" />
+    <Compile Include="Net\FtlTransferPlayer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ProxyMessageHandler.cs" />
     <Compile Include="ProxyMotdProvider.cs" />
@@ -88,7 +93,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <None Include="packages.config" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
