@@ -10,7 +10,7 @@ namespace LeetProxy.Server.Net
 		public IPEndPoint serverAddress; // = null;
 		public long clientId; // = null;
 		public Skin skin; // = null;
-		public string extraData;
+		public string certificateData;
 
 		public FtlTransferPlayer()
 		{
@@ -28,7 +28,7 @@ namespace LeetProxy.Server.Net
 			Write(serverAddress);
 			Write(clientId);
 			Write(skin);
-			Write(extraData);
+			Write(certificateData);
 
 			AfterEncode();
 		}
@@ -47,7 +47,7 @@ namespace LeetProxy.Server.Net
 			serverAddress = ReadIPEndPoint();
 			clientId = ReadLong();
 			skin = ReadSkin();
-			extraData = ReadString();
+			certificateData = ReadString();
 
 			AfterDecode();
 		}

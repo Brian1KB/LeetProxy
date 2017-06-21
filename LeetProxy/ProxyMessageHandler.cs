@@ -103,17 +103,8 @@ namespace LeetProxy.Server
 			WritePackage(message);
 		}
 
-		public void HandleMcpeClientMagic(McpeClientMagic message)
+		public void HandleMcpeClientToServerHandshake(McpeClientToServerHandshake message)
 		{
-			if (message == null)
-			{
-				message = new McpeClientMagic();
-
-				WriteBytes(message.Encode());
-
-				return;
-			}
-
 			WritePackage(message);
 		}
 
@@ -133,6 +124,11 @@ namespace LeetProxy.Server
 		}
 
 		public void HandleMcpeRemoveBlock(McpeRemoveBlock message)
+		{
+			WritePackage(message);
+		}
+
+		public void HandleMcpeLevelSoundEvent(McpeLevelSoundEvent message)
 		{
 			WritePackage(message);
 		}
@@ -157,6 +153,11 @@ namespace LeetProxy.Server
 			WritePackage(message);
 		}
 
+		public void HandleMcpeBlockPickRequest(McpeBlockPickRequest message)
+		{
+			throw new NotImplementedException();
+		}
+
 		public void HandleMcpeUseItem(McpeUseItem message)
 		{
 			WritePackage(message);
@@ -165,6 +166,11 @@ namespace LeetProxy.Server
 		public void HandleMcpePlayerAction(McpePlayerAction message)
 		{
 			WritePackage(message);
+		}
+
+		public void HandleMcpeEntityFall(McpeEntityFall message)
+		{
+			throw new NotImplementedException();
 		}
 
 		public void HandleMcpeAnimate(McpeAnimate message)
@@ -197,6 +203,11 @@ namespace LeetProxy.Server
 			WritePackage(message);
 		}
 
+		public void HandleMcpeAdventureSettings(McpeAdventureSettings message)
+		{
+			throw new NotImplementedException();
+		}
+
 		public void HandleMcpeBlockEntityData(McpeBlockEntityData message)
 		{
 			WritePackage(message);
@@ -217,7 +228,12 @@ namespace LeetProxy.Server
 			WritePackage(message);
 		}
 
-		public void HandleMcpeItemFramDropItem(McpeItemFramDropItem message)
+		public void HandleMcpeItemFrameDropItem(McpeItemFrameDropItem message)
+		{
+			WritePackage(message);
+		}
+
+		public void HandleMcpeCommandBlockUpdate(McpeCommandBlockUpdate message)
 		{
 			WritePackage(message);
 		}

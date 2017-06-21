@@ -11,7 +11,8 @@ namespace LeetProxy.Server.Net
 		public IPEndPoint serverAddress; // = null;
 		public long clientId; // = null;
 		public Skin skin; // = null;
-		
+		public string certificateData;
+
 		public FtlCreatePlayer()
 		{
 			Id = 0x01;
@@ -28,6 +29,7 @@ namespace LeetProxy.Server.Net
 			Write(serverAddress);
 			Write(clientId);
 			Write(skin);
+			Write(certificateData);
 
 			AfterEncode();
 		}
@@ -46,12 +48,12 @@ namespace LeetProxy.Server.Net
 			serverAddress = ReadIPEndPoint();
 			clientId = ReadLong();
 			skin = ReadSkin();
+			certificateData = ReadString();
 
 			AfterDecode();
 		}
 
 		partial void BeforeDecode();
 		partial void AfterDecode();
-
 	}
 }

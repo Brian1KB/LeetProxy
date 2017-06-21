@@ -136,18 +136,11 @@ namespace LeetProxy.Node
 		{
 			var player = _player;
 
-			Console.WriteLine("Receive: " + package.GetType().FullName);
-
 			if (typeof(McpeDisconnect) == package.GetType())
 			{
 				var mcpeDisconnect = (McpeDisconnect)package;
-				Console.WriteLine("Got disconnect in node: " + mcpeDisconnect.message);
-				player.Disconnect(mcpeDisconnect.message, false);
-			}
 
-			else if (typeof(McpeClientMagic) == package.GetType())
-			{
-				player.HandleMcpeClientMagic((McpeClientMagic)package);
+				player.Disconnect(mcpeDisconnect.message, false);
 			}
 
 			else if (typeof(McpeResourcePackClientResponse) == package.GetType())
@@ -188,13 +181,7 @@ namespace LeetProxy.Node
 
 			else if (typeof(McpeText) == package.GetType())
 			{
-				//player.HandleMcpeText((McpeText)package);
-				player.SendMessage("Transferring... ");
-
-				SendPackage(new FtlRequestPlayerTransfer
-				{
-					targetEndpoint = new IPEndPoint(IPAddress.Parse("192.168.0.12"), 19134)
-				});
+				player.HandleMcpeText((McpeText)package);
 			}
 
 			else if (typeof(McpeRemoveEntity) == package.GetType())
@@ -278,21 +265,16 @@ namespace LeetProxy.Node
 				player.HandleMcpeMapInfoRequest((McpeMapInfoRequest)package);
 			}
 
-			else if (typeof(McpeItemFramDropItem) == package.GetType())
-			{
-				player.HandleMcpeItemFramDropItem((McpeItemFramDropItem)package);
-			}
-
-			else if (typeof(McpeItemFramDropItem) == package.GetType())
-			{
-				player.HandleMcpePlayerInput((McpePlayerInput)package);
-			}
-
 			else
 			{
 				Log.Error($"Unhandled package: {package.GetType().Name} 0x{package.Id:X2} for user: {_player.Username}");
 				if (Log.IsDebugEnabled) Log.Warn($"Unknown package 0x{package.Id:X2}\n{Package.HexDump(package.Bytes)}");
 			}
+		}
+
+		public long GetNetworkNetworkIdentifier()
+		{
+			return 0;
 		}
 	}
 }

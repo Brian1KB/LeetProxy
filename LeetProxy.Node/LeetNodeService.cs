@@ -1,5 +1,6 @@
 ﻿using log4net;
 using MiNET;
+using MiNET.Utils;
 using Topshelf;
 
 namespace LeetProxy.Node
@@ -18,7 +19,7 @@ namespace LeetProxy.Node
 				ServerRole = ServerRole.Node
 			};
 
-			_server.ServerManager = new NodeServerManager(_server, 19134);
+			_server.ServerManager = new NodeServerManager(_server, Config.GetProperty("port", 19132));
 			_server.LevelManager = new SpreadLevelManager(10);
 
 			_server.StartServer();

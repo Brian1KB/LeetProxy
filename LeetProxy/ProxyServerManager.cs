@@ -10,7 +10,7 @@ namespace LeetProxy.Server
 
 		public ProxyServerManager()
 		{
-			_serverConnections.Add(new ProxyNodeConnection(new IPEndPoint(IPAddress.Parse("192.168.0.12"), 19133)));
+			_serverConnections.Add(new ProxyNodeConnection(new IPEndPoint(IPAddress.Loopback, 19133)));
 		}
 
 		public IServer GetServer()

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Globalization;
 using System.IO;
 using System.Net;
 using System.Net.Sockets;
@@ -12,6 +11,7 @@ namespace LeetProxy.Server
 	internal class ProxyNodeConnection : IServer
 	{
 		private static readonly ILog Log = LogManager.GetLogger(typeof(ProxyNodeConnection));
+		private static readonly NewtonsoftMapper JsonMapper = new NewtonsoftMapper();
 		private readonly IPEndPoint _ipEndPoint;
 
 		public ProxyNodeConnection(IPEndPoint ipEndPoint)
@@ -38,7 +38,8 @@ namespace LeetProxy.Server
 					clientuuid = playerInfo.ClientUuid,
 					serverAddress = ParseIpEndpoint(playerInfo.ServerAddress),
 					clientId = playerInfo.ClientId,
-					skin = playerInfo.Skin
+					skin = playerInfo.Skin,
+					certificateData = JsonMapper.Serialize(playerInfo.CertificateData)
 				}.Encode();
 
 				writer.Write(ftlCreatePlayer.Length);

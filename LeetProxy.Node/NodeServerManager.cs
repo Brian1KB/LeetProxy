@@ -12,6 +12,7 @@ namespace LeetProxy.Node
 	internal class NodeServerManager : IServerManager
 	{
 		private static readonly ILog Log = LogManager.GetLogger(typeof(NodeServerManager));
+		private static readonly NewtonsoftMapper JsonMapper = new NewtonsoftMapper();
 
 		private readonly MiNetServer _server;
 		private readonly TcpListener _listener;
@@ -20,7 +21,7 @@ namespace LeetProxy.Node
 		{
 			_server = server;
 			
-			_listener = new TcpListener(IPAddress.Parse("192.168.0.12"), port);
+			_listener = new TcpListener(IPAddress.Loopback, port);
 			_listener.Start();
 
 			_listener.BeginAcceptTcpClient(AcceptTcpClient, _listener);
@@ -46,7 +47,7 @@ namespace LeetProxy.Node
 
 					if (ftlPackage.GetType() == typeof(FtlCreatePlayer))
 					{
-						var player = _server.PlayerFactory.CreatePlayer(_server, (IPEndPoint)client.Client.RemoteEndPoint);
+						var player = _server.PlayerFactory.CreatePlayer(_server, (IPEndPoint)client.Client.RemoteEndPoint, null);
 						var networkHandler = new NodeNetworkHandler(_server, player, client);
 
 						player.UseCreativeInventory = false;
@@ -57,12 +58,13 @@ namespace LeetProxy.Node
 						player.ServerAddress = ((FtlCreatePlayer)ftlPackage).serverAddress.Address.ToString();
 						player.ClientId = ((FtlCreatePlayer)ftlPackage).clientId;
 						player.Skin = ((FtlCreatePlayer)ftlPackage).skin;
+						player.CertificateData = JsonMapper.Parse<CertificateData>(((FtlCreatePlayer) ftlPackage).certificateData);
 
 						ftlPackage.PutPool();
 					}
 					else if (ftlPackage.GetType() == typeof(FtlTransferPlayer))
 					{
-						var player = _server.PlayerFactory.CreatePlayer(_server, (IPEndPoint)client.Client.RemoteEndPoint);
+						var player = _server.PlayerFactory.CreatePlayer(_server, (IPEndPoint)client.Client.RemoteEndPoint, null);
 						var networkHandler = new NodeNetworkHandler(_server, player, client);
 
 						player.UseCreativeInventory = false;
@@ -73,6 +75,7 @@ namespace LeetProxy.Node
 						player.ServerAddress = ((FtlTransferPlayer)ftlPackage).serverAddress.Address.ToString();
 						player.ClientId = ((FtlTransferPlayer)ftlPackage).clientId;
 						player.Skin = ((FtlTransferPlayer)ftlPackage).skin;
+						player.CertificateData = JsonMapper.Parse<CertificateData>(((FtlTransferPlayer)ftlPackage).certificateData);
 
 						ftlPackage.PutPool();
 					}
